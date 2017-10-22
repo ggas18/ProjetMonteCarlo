@@ -36,8 +36,13 @@ print('-f2','sin0_pi','-dpng')
 clc
 clear
 
-delete test.csv
-c = {'abc' 'def' 'ghk';23,24,67;87,13,999;65,6767,546};
+%delete test.csv
+A=[23,24,67,4;87,13,999,7;65,67,546,13];
+data=num2cell(A,2);
+%c = {'abec' 'deddf' 'ghk' 'ggas18';23,24,67,4;87,13,999,7;65,6767,546,13};
+c = cell(size(A,1)+1,size(A,2));
+c(1,:)={'abec' 'deddf' 'ghk' 'ggas18'};
+c(2:end,:)=num2cell(A);
 fid = fopen('test.csv', 'w') ;
 fprintf(fid, '%s,', c{1,1:end-1}) ;
 fprintf(fid, '%s\n', c{1,end}) ;
