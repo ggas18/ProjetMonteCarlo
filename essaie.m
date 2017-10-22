@@ -11,20 +11,6 @@ end
 moy=mean(X);
 var=std(X)^2;
 
-%% Test des taux d'intérêt
-clc
-r=0:0.001:20/100;
-t=[(1+r).^4;(1+r).^3; (1+r).^2; (1+r).^1; (1+r).^0];
-Ax=[13; 14; 16; 18; 20];
-B=[16; 16; 16; 16; 16];
-C=[17; 17; 16; 16; 13];
-Comp=[Ax'*t; B'*t; C'*t];
-
-%%
-i=3.7/100;
-a1=10000;
-r=a1/10;
-val=((a1+r/i) *((i+1)^n - 1 )/i - n*r/i)*(1+i);
 
 %% test de la fonction monteCarlo
 clc
@@ -34,16 +20,27 @@ g=@(x)log(x);
 f=@(x) 1/pi;
 [I_hat,flag,err_std,nb_sim]=monteCarlo(0.95,0.01,10000000,g,f);
 
-%% Theorie des jeux: jeux à somme nulle
-Aj=[4 2
-    1 3];
-f=[ones(1,size(Aj,1)) 1];
+%% test de comment enregistrer automatiquement les figures
+x=0:0.01:pi;
+figure(2);
+plot(x)
+chem='images';
+chem=strcat(chem,'/droite0_pi');
+print('-f2',chem,'-dpng')
 
-Ax=[-Aj  ones(size(Aj,1),1)];
-Ay=[-Aj' ones(size(Aj,1),1)];
-Aeq=[ones(1,size(Aj,1)) 0];
-beq=1;
+figure(2);
+plot(sin(x))
+print('-f2','sin0_pi','-dpng')
 
-b=zeros(1,size(Aj,2));
-x=linprog(-f,Ax,b,Aeq,beq);
-y=linprog(-f,Ay,b,Aeq,beq);
+%% test de comment enregistrer automatiquement les fichiers CSV
+clc
+clear
+
+delete test.csv
+c = {'abc' 'def' 'ghk';23,24,67;87,13,999;65,6767,546};
+fid = fopen('test.csv', 'w') ;
+fprintf(fid, '%s,', c{1,1:end-1}) ;
+fprintf(fid, '%s\n', c{1,end}) ;
+fclose(fid) ;
+
+dlmwrite('test.csv', c(2:end,:), '-append') ;
