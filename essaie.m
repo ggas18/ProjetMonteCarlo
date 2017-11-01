@@ -42,17 +42,21 @@ clc
 clear
 close all
 
-N=100000;
+% le quantile d'ordre (alpha+1)/2 de la loi normale
+% centrée reduite.
+alpha=.95;
+Z=norminv((alpha+1)/2,0,1); 
+    
 Nsim=500;
 pas=10;
 I=zeros(1,Nsim);
 Err=I;
 K=1;
-bet=1;
-C=(exp(bet^2/2)*normcdf(bet-log(K)/bet,0,1)-K*normcdf(-log(K)/bet,0,1))*ones(1,Nsim);
+beta=1;
+C=(exp(beta^2/2)*normcdf(beta-log(K)/beta,0,1)-K*normcdf(-log(K)/beta,0,1))*ones(1,Nsim);
 for n=1:Nsim
     
-[I_hat,err_std]=monteCarloCall(0.95,n*pas);
+[I_hat,err_std]=monteCarloCall(n*pas);
 I(n)=I_hat;
 Err(n)=err_std;
 end
@@ -62,8 +66,8 @@ figure();
 hold on
 figEx=plot(C);
 figI=plot(I);
-figHaut=plot(I+Err);
-figBas=plot(I-Err);
+figHaut=plot(I+Z*Err);
+figBas=plot(I-Z*Err);
 title('Monte carlo exo1 Call')
 legend([figEx, figI, figHaut, figBas],'exact', 'estimation','borne haute','borne basse');
 
@@ -73,17 +77,21 @@ clc
 clear
 close all
 
-N=100000;
+% le quantile d'ordre (alpha+1)/2 de la loi normale
+% centrée reduite.
+alpha=.95;
+Z=norminv((alpha+1)/2,0,1); 
+
 Nsim=500;
-pas=100;
+pas=10;
 I=zeros(1,Nsim);
 Err=I;
 K=1;
-bet=1;
-C=(-exp(bet^2/2)*normcdf(-bet+log(K)/bet,0,1)+K*normcdf(log(K)/bet,0,1))*ones(1,Nsim);
+beta=1;
+P=(-exp(beta^2/2)*normcdf(-beta+log(K)/beta,0,1)+K*normcdf(log(K)/beta,0,1))*ones(1,Nsim);
 for n=1:Nsim
     
-[I_hat,err_std]=monteCarloPut(0.95,n*10);
+[I_hat,err_std]=monteCarloPut(n*10);
 I(n)=I_hat;
 Err(n)=err_std;
 end
@@ -91,11 +99,103 @@ end
 % affichage des resultats
 figure();
 hold on
-figEx=plot(C);
+figEx=plot(P);
 figI=plot(I);
-figHaut=plot(I+Err);
-figBas=plot(I-Err);
+figHaut=plot(I+Z*Err);
+figBas=plot(I-Z*Err);
 title('Monte carlo exo1 Put')
 legend([figEx, figI, figHaut, figBas],'exact', 'estimation','borne haute','borne basse');
 
+%% test distance de Levenshtein
+clear all
 
+s = char('tests');
+t = char('twist');
+
+% Edit Matrix
+m=length(s);
+n=length(t);
+mat=zeros(m+1,n+1);
+for i=1:1:m
+    mat(i+1,1)=i;
+end
+for j=1:1:n
+    mat(1,j+1)=j;
+end
+for i=1:m
+    for j=1:n
+        if (s(i) == t(j))
+            mat(i+1,j+1)=mat(i,j);
+        else
+            mat(i+1,j+1)=1+min(min(mat(i+1,j),mat(i,j+1)),mat(i,j));
+        end
+    end
+end
+
+% Edit Sequence
+s = char('tests');
+t = char('twist');
+i = m+1;
+j = n+1;
+display([s ' --> ' t])
+while(i ~= 1 && j ~= 1)
+    temp = min(min(mat(i-1,j-1), mat(i,j-1)), mat(i-1,j));
+    if(mat(i-1,j) == temp)
+        i = i - 1;
+        t = [t(1:j-1) s(i) t(j:end)];
+        disp(strcat(['insertion:' s ' --> ' t]))
+    elseif(mat(i-1,j-1) == temp)
+        if(mat(i-1,j-1) == mat(i,j))
+            i = i - 1;
+            j = j - 1;
+            disp(strcat(['unchanged:' s ' --> ' t]))
+        else
+            i = i - 1;
+            j = j - 1;
+            t(j) = s(i);
+            disp(strcat(['substition:' s ' --> ' t]))
+        end
+    elseif(mat(i,j-1) == temp)
+        j = j - 1;
+        t(j) = [];
+        disp(strcat(['deletion:' s ' --> ' t]))
+    end
+end
+
+%% optimisation des codes de monte carlo pour le call
+clc
+clear
+close all
+
+N_t=500;
+pas=10;
+
+[I_hat,IC_h,IC_b,C_exact]=mcCall(pas,N_t);
+% affichage des resultats
+figure();
+hold on
+figEx=plot(C_exact);
+figI=plot(I_hat);
+figHaut=plot(IC_h);
+figBas=plot(IC_b);
+title('Monte carlo exo1 Call')
+legend([figEx, figI, figHaut, figBas],'exact', 'estimation','borne haute','borne basse');
+
+%% optimisation des codes de monte carlo pour le call
+clc
+clear
+close all
+
+N_t=2000;
+pas=1000;
+
+[I_hat,IC_h,IC_b,P_exact]=mcPut(pas,N_t);
+% affichage des resultats
+figure();
+hold on
+figEx=plot(P_exact);
+figI=plot(I_hat);
+figHaut=plot(IC_h);
+figBas=plot(IC_b);
+title('Monte carlo exo1 Put')
+legend([figEx, figI, figHaut, figBas],'exact', 'estimation','borne haute','borne basse');
