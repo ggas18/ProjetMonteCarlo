@@ -1,18 +1,17 @@
-function [I_hat,err_std]=monteCarloCall(N)
+function [I_hat,err_std]=monteCarloCallExo2(N)
   % Cette fonction fait une simulation de Monte en
-  % N echantillons
+  % N echantillons en utilisant la deuxième expression
+  % du call et on simule une loi exponentielle
   % ENTREE : N: Le nombre de simulation
   %          
   % SORTIE : I_hat: La valeur approchee de la quantite 
   %                  que nous voulons evaluer.
   %          err_std: Erreur standard de la simulation realisee
   %                   parametre du call
-  beta=1;
-  K=1;
   
-  X= randn(); % simulation d'une variable de loi normale
-  % centree reduite
-  Y=max(exp(beta*X)-K,0);% on evalue ensuite Y 
+  X= exprnd(1); % simulation d'une variable loi exponentielle
+  % de parametre 1
+  Y=(exp(sqrt(2*X))-1)/sqrt(2*X);
   S1=Y; % somme partielle des Yi
   
   S2=Y^2; % somme patielle des Yi^2
@@ -21,8 +20,8 @@ function [I_hat,err_std]=monteCarloCall(N)
   
  while(n<N)
       
-      X=randn();% on simule une variable aleatoire uniforme sur [0,pi]
-      Y=max(exp(beta*X)-K,0);% on evalue ensuite Y 
+      X=exprnd(1);% on une variable de loi exponentielle de parametre 1
+      Y=(exp(sqrt(2*X))-1)/(sqrt(2*X)*sqrt(2*pi));% on evalue ensuite Y 
       S1=S1+Y;    % mise-a-jour de S1
       S2=S2+Y^2;  % mise-a-jour de S2
       

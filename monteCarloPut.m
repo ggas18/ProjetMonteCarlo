@@ -12,14 +12,15 @@ function [I_hat,err_std]=monteCarloPut(N)
   
   X= randn(); % simulation d'une variable de loi normale
   % centree reduite
-  S1=X; % somme partielle des Yi
+  Y=max(K-exp(beta*X),0);% on evalue ensuite Y 
+  S1=Y; % somme partielle des Yi
   
-  S2=X^2; % somme patielle des Yi^2
+  S2=Y^2; % somme patielle des Yi^2
   n=1;
   
- while(n<=N)
+ while(n<N)
       
-      X=randn();% on simule une variable aleatoire uniforme sur [0,pi]
+      X=randn();% on une normale centree reduite
       Y=max(K-exp(beta*X),0);% on evalue ensuite Y 
       S1=S1+Y;    % mise-a-jour de S1
       S2=S2+Y^2;  % mise-a-jour de S2
