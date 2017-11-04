@@ -235,6 +235,19 @@ figBas=plot(IC_b);
 title('Monte carlo exo1 Put')
 legend([figEx, figI, figHaut, figBas],'exact', 'estimation','borne haute','borne basse');
 
-%% test de text sur une figure
-A = 1/eps;
-str_e = sprintf('ggas 18 %0.5e',A)
+%% calcul de la variance du call
+ N=1000000;
+ X=randn(N,1); 
+ K=1;beta=1;
+ P_T=max(K-exp(beta*X),0);
+ C_T=max(exp(beta*X)-K,0);
+ L_N=exp(beta*X); gamma=cov(P_T,L_N); 
+ varC_2=2*gamma(1,2)+gamma(2,2)+gamma(1,1);
+ varC_1=std(C_T)^2;
+ 
+ %% test des matrices de plusieurs dimensions
+c = {'abc' 'def' 'ghk';[23],[24],[67];[87],[13],[999];[656],[6767],[546]}; 
+fid = fopen('junk.csv','w');
+fprintf(fid,'%s, %s, %s\n',c{1,:});
+fprintf(fid,'%f, %f, %f\n',c{2:end,:});
+fclose(fid);

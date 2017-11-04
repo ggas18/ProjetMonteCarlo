@@ -30,7 +30,7 @@ function [I_hat,err_std]=monteCarloCall(N)
       
  end
  % on estime la variance par son estimateur sans biais
- s=(S2-N*(S1/N)^2)/(N-1);
+ s=sqrt((S2-N*(S1/N)^2)/(N-1));
  % on retourne l'estimation obtenue.
  I_hat=S1/N;
  % on retourne l'erreur standard de cette simulation

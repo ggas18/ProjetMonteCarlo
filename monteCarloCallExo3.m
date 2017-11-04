@@ -11,19 +11,19 @@ function [I_hat,err_std]=monteCarloCallExo3(N)
   K=1;
   X= randn(); % simulation d'une variable de loi normale
   % centree reduite
-  Y=max(K-exp(beta*X),0)-K+exp(beta*X);% on evalue ensuite Y 
+  Y=max(K-exp(beta*X),0)-K+exp(beta^2/2);
   S1=Y; % somme partielle des Yi
   S2=Y^2; % somme patielle des Yi^2
   n=1;
  while(n<N)
       X=randn();% on une normale centree reduite
-      Y=max(K-exp(beta*X),0)-K+exp(beta*X);% on evalue ensuite Y 
+      Y=max(K-exp(beta*X),0)-K+exp(beta^2/2);
       S1=S1+Y;    % mise-a-jour de S1
       S2=S2+Y^2;  % mise-a-jour de S2 
       n=n+1; 
  end
  % on estime la variance par son estimateur sans biais
- s=(S2-N*(S1/N)^2)/(N-1);
+ s=sqrt((S2-N*(S1/N)^2)/(N-1));
  % on retourne l'estimation obtenue.
  I_hat=S1/N;
  % on retourne l'erreur standard de cette simulation

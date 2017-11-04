@@ -1,4 +1,4 @@
-%% monte carlo pour l'exercice 1
+%% monte carlo pour l'exercice 2
 
 clc
 close all
@@ -57,7 +57,7 @@ end
 % preparation de la figure
 N=pas*(1:Nsim); % vecteur du nombre de simulation
 fig_exo1=figure();
-title('Monte carlo Exercice 1: question 1 2 et 3 avec \alpha =0.95')
+title('Monte carlo Exercice 2: question 1 2 et 3 avec \alpha =0.95')
 xlabel('Nombre de simulations')
 ylabel('Valeurs des options')
 hold on
@@ -79,9 +79,8 @@ legend([figEx_put, figI_put, figHaut_put, figBas_put,...
         figEx_call, figI_call, figHaut_call, figBas_call],...
         'exact put', 'estimation put','haute put','basse call',...
         'exact call', 'estimation call','haute call','basse call');
- 
  %%
  % on enregistre la figure sous format jpg
 chem='images';
-chem=strcat(chem,'/exo1');
+chem=strcat(chem,'/exo2');
 print(fig_exo1,chem,'-djpeg')

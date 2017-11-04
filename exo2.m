@@ -1,4 +1,4 @@
-%% monte carlo pour l'exercice 2
+%% monte carlo pour l'exercice 3
 clc;close all
 % le quantile d'ordre (alpha+1)/2 de la loi normale
 % centree reduite.
@@ -10,8 +10,6 @@ Nsim=200;pas=200;
 % et des erreurs. Pour trouver l'intervalle
 % de confiance plus tard il suffirat d'uti-
 % liser IC=[I-Z*s/sqrt(n),I+Z*s/sqrt(n)]
-I_put=zeros(1,Nsim);
-Err_put=I_put;
 I_call_1=zeros(1,Nsim);
 Err_call_1=I_call_1;
 I_call_2=zeros(1,Nsim);
@@ -26,36 +24,36 @@ C=C_ex*ones(1,Nsim);
 % fois pour obtenir Nsim simulation de chaque option
 
 % debut de la boucle for pour les Nsim estimations
-% estimation du call avec la methode de l'exo1
+% estimation du call avec la methode de l'exo2
 start=tic;
 for n=1:Nsim    
     [I_hat_call_1,err_std_call_1]=monteCarloCall(n*pas);
     I_call_1(n)=I_hat_call_1;
     Err_call_1(n)=err_std_call_1;   
 end
-t_exo1=toc(start);
-% fin de la boucle for pour les Nsim estimations exo1
+t_exo2=toc(start);
+% fin de la boucle for pour les Nsim estimations exo2
 % debut de la boucle for pour les Nsim estimations
-% estimation du call avec la methode de l'exo2
+% estimation du call avec la methode de l'exo3
 start=tic;
 for n=1:Nsim     
     [I_hat_call_2,err_std_call_2]=monteCarloCallExo2(n*pas);
     I_call_2(n)=I_hat_call_2;Err_call_2(n)=err_std_call_2;   
 end
-t_exo2=toc(start);
-% fin de la boucle for pour les Nsim estimations exo1
+t_exo3=toc(start);
+% fin de la boucle for pour les Nsim estimations exo3
 
 % affichage des resultats et preparation de la figure
 N=pas*(1:Nsim); % vecteur du nombre de simulation
 fig_exo2=figure();
-title('Exo 2 call seul: question 2 et 3 avec \alpha =0.95')
+title('Exo 3 call seul: question 2 et 3 avec \alpha =0.95')
 xlabel('Nombre de simulations')
 ylabel('Valeurs des options')
 hold on
 % ajout des temps de calculs
-str = {sprintf('temps exo 1: %0.2es',t_exo1),...
-       sprintf('temps exo 2: %0.2es',t_exo2)};
-text(pas*Nsim*7/14,.5,str)
+str = {sprintf('temps exo 2: %0.2es',t_exo2),...
+       sprintf('temps exo 3: %0.2es',t_exo3)};
+text(pas*Nsim*7/14,.7,str)
 % affichage du call exact
 figEx_call=plot(N,C,'LineWidth',2);% valeur exacte
 % affichages pour la methode de l'exo2
@@ -69,10 +67,10 @@ figBas_call_1=plot(N,I_call_1-Z*Err_call_1,'LineWidth',2);% borne inf de l'IC
 % ajout des legendes a la figure
 legend([ figI_call_2, figHaut_call_2, figBas_call_2,...
         figEx_call, figI_call_1, figHaut_call_1, figBas_call_1],...
-         'estimation exo2','haute exo2','basse exo2',...
-        'exact call', 'estimation exo1','haute exo1','basse exo1');
+         'estimation exo3','haute exo3','basse exo3',...
+        'exact call', 'estimation exo2','haute exo2','basse exo2');
  %%
  % on enregistre la figure sous format jpg
 chem='images';
-chem=strcat(chem,'/exo2');
+chem=strcat(chem,'/exo3');
 print(fig_exo2,chem,'-djpeg')
