@@ -68,7 +68,7 @@ hold on
 str = {sprintf('temps exo 4: %0.2es',t_exo4),...
        sprintf('temps exo 3: %0.2es',t_exo3),...
        sprintf('temps exo 2: %0.2es',t_exo2)};
-text(pas*Nsim*7/14,.5,str)
+text(pas*Nsim*7/14,.7,str)
 % affichage du call exact
 figEx_call=plot(N,C,'LineWidth',1.4,'Color','g');% valeur exacte
 % affichages pour la methode de l'exo3
